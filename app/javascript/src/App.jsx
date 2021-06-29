@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import CreateTask from "components/Tasks/CreateTask";
 import Dashboard from "components/Dashboard";
 
 import { setAuthHeaders } from "./apis/axios";
@@ -17,6 +18,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" render={() => <div>Home</div>} />
         <Route exact path="/about" render={() => <div>About</div>} />
+        <Route exact path="/tasks/create" component={CreateTask} />
         <Route exact path="/dashboard" component={Dashboard} />
       </Switch>
     </Router>
