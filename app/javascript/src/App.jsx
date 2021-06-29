@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import Dashboard from "components/Dashboard";
 
 import { setAuthHeaders } from "./apis/axios";
 import { initializeLogger } from "./common/logger";
