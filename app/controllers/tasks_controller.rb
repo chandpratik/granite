@@ -13,6 +13,8 @@ class TasksController < ApplicationController
       render status: :unprocessable_entity, json: { errors: errors  }
     end
   end
+  
+  private
 
   def task_params
     params.require(:task).permit(:title)
