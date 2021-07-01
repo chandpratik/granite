@@ -1,27 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { all, isNil, isEmpty, either } from "ramda";
 
-import Container from "components/Container";
-import ListTasks from "components/Tasks/ListTasks";
 import tasksApi from "apis/tasks";
+import Container from "components/Container";
 import PageLoader from "components/PageLoader";
 import Table from "components/Tasks/Table/index";
 
-import { setAuthHeaders } from "../../apis/axios";
-
 const Dashboard = ({ history }) => {
-  const [tasks, setTasks] = useState([]);
   const [pendingTasks, setPendingTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchTasks = async () => {
     try {
-      setAuthHeaders();
       const response = await tasksApi.list();
-      const { pending, completed } = response.data.tasks;
-      setPendingTasks(pending);
-      setCompletedTasks(completed);
+      setPendingTasks(response.data.tasks.pending);
+      setCompletedTasks(response.data.tasks.completed);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -35,8 +29,6 @@ const Dashboard = ({ history }) => {
       await fetchTasks();
     } catch (error) {
       logger.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -51,6 +43,19 @@ const Dashboard = ({ history }) => {
 
   const showTask = slug => {
     history.push(`/tasks/${slug}/show`);
+  };
+
+  const starTask = async (slug, status) => {
+    try {
+      const toggledStatus = status === "starred" ? "unstarred" : "starred";
+      await tasksApi.update({
+        slug,
+        payload: { task: { status: toggledStatus } },
+      });
+      await fetchTasks();
+    } catch (error) {
+      logger.error(error);
+    }
   };
 
   useEffect(() => {
@@ -83,6 +88,7 @@ const Dashboard = ({ history }) => {
           destroyTask={destroyTask}
           showTask={showTask}
           handleProgressToggle={handleProgressToggle}
+          starTask={starTask}
         />
       )}
       {!either(isNil, isEmpty)(completedTasks) && (
