@@ -1,6 +1,8 @@
 class User < ApplicationRecord
 
-  VALID_EMAIL_REGEX = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i.freeze  
+  VALID_EMAIL_REGEX = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+  validates :email, presence: true, length: { maximum: 255 },
+    format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
 
   has_many :comments, dependent: :destroy
   has_many :tasks, dependent: :destroy, foreign_key: :user_id
@@ -10,10 +12,7 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 35 }
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true, on: :create
-  validates :email, presence: true,
-                    uniqueness: true,
-                    length: { maximum: 50 },
-                    format: { with: VALID_EMAIL_REGEX }
+  
   
   before_save :to_lowercase
 
