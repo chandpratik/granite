@@ -1,11 +1,12 @@
 import axios from "axios";
 import { Toastr } from "../components/Common/Toastr";
+import { setToLocalStorage } from "helpers/storage";
 
 axios.defaults.baseURL = "/";
 
 export const setAuthHeaders = (setLoading = () => null) => {
   axios.defaults.headers = {
-    Accept: "applicaion/json",
+    Accept: "application/json",
     "Content-Type": "application/json",
     "X-CSRF-TOKEN": document
       .querySelector('[name="csrf-token"]')

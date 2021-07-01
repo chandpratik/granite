@@ -5,15 +5,16 @@ class TasksController < ApplicationController
   end
 
   def create
-    task = Task.new(task_params)
-    if task.save
-      render status: :ok, json: { notice:  t('successfully_created') }
+    @task = Task.new(task_params)
+    if @task.save
+      render status: :ok, json: { notice: t('successfully_created', entity: 'Task') }
     else
-      errors = task.errors.full_messages
+      errors = @task.errors.full_messages
       render status: :unprocessable_entity, json: { errors: errors  }
     end
   end
-
+  
+  before_action :authenticate_user_using_x_auth_token, except: [:new, :edit]
   before_action :load_task, only: %i[show update destroy]
 
   def show
