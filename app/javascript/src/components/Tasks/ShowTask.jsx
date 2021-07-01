@@ -25,6 +25,10 @@ const ShowTask = () => {
     }
   };
 
+  const updateTask = () => {
+    history.push(`/tasks/${taskDetails.slug}/edit`);
+  };
+
   useEffect(() => {
     fetchTaskDetails();
   }, []);
